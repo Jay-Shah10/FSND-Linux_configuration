@@ -72,11 +72,9 @@ status - will show which rule is allowed.
 
 We will also make a change to a file to allow this port. 
 ```
-sudo vim /etc/ssh/shh_config
+sudo vim /etc/ssh/sshd_config
 
-add in 
-Port 2200
-under Port 22
+port 2200
 ```
 
 The last thing we want to do it configure the time zone.
