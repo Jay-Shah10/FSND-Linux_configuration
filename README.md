@@ -11,7 +11,13 @@ This is the fifth project for Udacity Full Stack Development. The main purpose o
 ```
 
 ## How to
-### Step one
+When you first connect to the server. update and upgrade all linux packages.
+```
+sudo apt-get update
+sudo apt-get upgrade
+```
+
+### Step one:  setting up ports.
 Navigate to the following link: https://console.aws.amazon.com and set up your account.  
 We will be using the lightsail instance. Click on "Build Using Virutal Service - with Light Sail."  
 Click on "linux", "OS Only", and select your version of Ubuntu (I have chosen - 16.x).
@@ -25,6 +31,105 @@ Navigate to the "Network" section and click on "Add" Type the following in.
 custom | port: 2200
 ```
 
-### Step Two
+### Step Two: configure firewall.
 Here we are going to configure the firewall and add a user.  
-Make sure that the firewall is disable before we start.  
+Make sure that the firewall is disable before we start.
+Make the following changes: 
+```
+sudo ufw allow ssh
+sudo ufw allow www
+sudo ufw allow 2200/tcp
+sudo ufw allow 123/udp
+sudo ufw allow 80/tcp
+```
+Makesure these are allowed before enabling ufw.
+To eanble the fire wall and to check the status.
+```
+sudo ufw enable
+sudo ufw status
+```
+
+status - will show which rule is allowed. 
+
+We will also make a change to a file to allow this port. 
+```
+sudo vim /etc/ssh/shh_config
+
+add in 
+Port 2200
+under Port 22
+```
+
+The last thing we want to do it configure the time zone.
+```
+sudo dpkg-reconfigure tzdata
+```
+
+
+### Step Three: creating user.
+We are going to create a user called grader and give them sudo rights.
+```
+sudo adduser grader
+sudo adduser grader sudo
+```
+we also need to add the rights to sudoers file. 
+```
+sudo visudo
+```
+add in the following line under "root ALL=(ALL:ALL) ALL"
+```
+grader ALL=(ALL:ALL) ALL
+```
+To check if grader has sudo rights: 
+```
+sudo su - grader
+sudo whoami
+```
+
+you can exit user using 
+```
+exit
+```
+
+### Step Four: ssh key and remote connection.
+Now to generate a key that will be needed in order to connect to server remotely.
+This will be done using a tool called ssh-keygen.
+This will be first genreated on you local vagrant machine.
+```
+ssh-keygen
+```
+make a directory called .ssh/linuxcourse
+```
+mkdir .ssh
+cd .ssh
+mkdir linuxcourse
+```
+you should have a private and public key.
+open the public key file.
+```
+cat linuxcourse.pub
+```
+we will need this key to be pasted in the lighsail server.
+switch to user grader
+```
+sudo su - grader
+```
+Create a folder called .ssh
+```
+sudo mkdir .ssh
+```
+create a file that will hold the key. 
+```
+sudo vim .ssh/authorized_keys
+```
+paste the public key that was created and paste it there.
+Now to make a connection to the server remotely
+```
+ssh -i ~/.ssh/linuxcourse grader@34.200.229.181
+```
+static public IP = 34.200.229.181
+
+### Step Five: Configuring Flask App
+
+
+
