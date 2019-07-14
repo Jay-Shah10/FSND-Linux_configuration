@@ -129,7 +129,70 @@ ssh -i ~/.ssh/linuxcourse grader@34.200.229.181
 ```
 static public IP = 34.200.229.181
 
-### Step Five: Configuring Flask App
+### Step Five: Configuring
+<strong>Install and configure Apache and mod_wsgi.</strong>  
+Install apache ```sudo apt-get install apache2```  
+Install mod_wsgi ```sudo apt-get install python-setuptools libapache2-mod-wsgi```  
+Restart apache ```sudo service apache restart```  
+
+Install and Configure postgresql. 
+```
+sudo apt-get install postgresql
+```
+login in as user "postgres'
+```
+sudo su - postgres
+```
+Get into postgresql api: ```psql```
+Create a database and a user. 
+```
+postgres=# CREATE DATABASE catalog;
+postgres=# CREATE USER catalog;
+```
+Set a password for user catalog
+```
+postgres=# ALTER ROLE catalog WITH PASSWORD 'password';
+```
+Give user permission to catalog application database.
+```
+postgres=# GRANT ALL PRIVILEGES ON DATABASE catalog TO catalog;
+```
+Exit out of the api and exit user. 
+```
+postgres=# \q
+exit
+```
+
+<strong>Install Git and configure Postgresql</strong>
+```
+sudo apt-get install git
+```
+Navigate to dir: ```cd /var/www/```  
+Create a folder called "FlaskApp"  and movie into the dir ```cd FlaskApp```.  
+Clone in your repo
+```
+git clone <repo link>
+```
+once you are here rename the repo folder to "FlaskApp"
+```
+sudo mv ./<repo_name> ./FlaskApp
+cd FlaskApp
+```
+Rename application.py to ```__init__.py```
+``` sudo mv application.py __init__.py``` 
+Edit ```database_setup.py, __init__.py```
+Change ```engine=create_engine(sql....)``` to 
+```
+create_engine('postgresql://catalog:password@localhost/catalog')
+```
+
+Install pip ``` sudo apt-get install python-pip```  
+User pip to install requirements.txt
+```
+sudo pip install -r requirements.txt
+```
+Install psycopg2 ```sudo apt-get -qqy install postgresql python-psycopg2```  
+Create database schema ```sudo python database_setup.py```
 
 
 
