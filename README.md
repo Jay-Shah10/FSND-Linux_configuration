@@ -192,7 +192,58 @@ User pip to install requirements.txt
 sudo pip install -r requirements.txt
 ```
 Install psycopg2 ```sudo apt-get -qqy install postgresql python-psycopg2```  
-Create database schema ```sudo python database_setup.py```
+Create database schema ```sudo python database_setup.py```  
 
+### Configure Host
+Create a FlaskApp.conf file in 
+```
+sudo vim /etc/apache2/sites-available/FlaskApp.conf
+```
+Add the following: 
+```
+<VirtualHost *:80>
+	ServerName <your public IP>
+	ServerAdmin <you email>
+	WSGIScriptAlias / /var/www/FlaskApp/flaskapp.wsgi
+	<Directory /var/www/FlaskApp/FlaskApp/>
+		Order allow,deny
+		Allow from all
+	</Directory>
+	Alias /static /var/www/FlaskApp/FlaskApp/static
+	<Directory /var/www/FlaskApp/FlaskApp/static/>
+		Order allow,deny
+		Allow from all
+	</Directory>
+	ErrorLog ${APACHE_LOG_DIR}/error.log
+	LogLevel warn
+	CustomLog ${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>
+```
+
+<strong>Create a .wsgi file under /var/www/FlaskApp</strong>  
+```
+cd /var/www/FlaskApp
+sudo vim /flaskapp.wsgi
+```
+add the following: 
+```
+#!/usr/bin/python
+import sys
+import logging
+logging.basicConfig(stream=sys.stderr)
+sys.path.insert(0,"/var/www/FlaskApp/")
+
+from FlaskApp import app as application
+application.secret_key = 'Add your secret key'
+```
+
+Enable the virutual host: ```sudo a2ensite FlaskApp```  
+May have to restart apache2 server: ```sudo server apache2 restart```  
+
+You sould be able to navigate to the PUblic IP of the lighsail server and app should be running.
+
+## Resources
+https://www.digitalocean.com/community/tutorials/how-to-deploy-a-flask-application-on-an-ubuntu-vps
+https://mudspringhiker.github.io/deploying-a-flask-web-app-on-lightsail-aws.html
 
 
