@@ -241,6 +241,7 @@ Enable the virutual host: ```sudo a2ensite FlaskApp```
 May have to restart apache2 server: ```sudo server apache2 restart```  
 
 You sould be able to navigate to the PUblic IP of the lighsail server and app should be running.
+you will have to add in <ip>/genres
 
 ## Resources
 https://www.digitalocean.com/community/tutorials/how-to-deploy-a-flask-application-on-an-ubuntu-vps
