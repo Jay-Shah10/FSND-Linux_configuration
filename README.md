@@ -16,6 +16,10 @@ When you first connect to the server. update and upgrade all linux packages.
 sudo apt-get update
 sudo apt-get upgrade
 ```
+If you still have issues trying to upgrade. 
+```
+sudo apt-get update && sudo apt-get dist-upgrade
+```
 
 ### Step one:  setting up ports.
 Navigate to the following link: https://console.aws.amazon.com and set up your account.  
@@ -31,6 +35,17 @@ Navigate to the "Network" section and click on "Add" Type the following in.
 custom | port: 2200
 ```
 
+We have to also update the following file: 
+```
+sudo vim /etc/ssh/sshd_config
+```
+Change the port from 22 to 2200.
+Change PermitRootLogin to no
+```
+PermitRootLogin no
+```
+<strong>Make sure that port is enabled before denying port 22.</strong>
+
 ### Step Two: configure firewall.
 Here we are going to configure the firewall and add a user.  
 Make sure that the firewall is disable before we start.
@@ -41,6 +56,10 @@ sudo ufw allow www
 sudo ufw allow 2200/tcp
 sudo ufw allow 123/udp
 sudo ufw allow 80/tcp
+```
+Deny port 22
+```
+sudo ufw deny 22
 ```
 Makesure these are allowed before enabling ufw.
 To eanble the fire wall and to check the status.
